@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privileged-Access Sentinel · FinSpark'26</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>🛡️ Privileged-Access Sentinel</h1>
+      <p class="sub">FinSpark'26 · PS1 — attack-validated insider-threat control plane</p>
+    </div>
+    <div class="controls">
+      <button id="run-attack" class="danger">▶ Run Attack Scenario</button>
+      <button id="reset">↺ Reset</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- LEFT -->
+    <section class="col">
+      <div class="card">
+        <h2>👤 Identities &amp; baselines</h2>
+        <div id="identities"></div>
+      </div>
+      <div class="card">
+        <h2>🏦 Protected systems</h2>
+        <div id="systems"></div>
+      </div>
+      <div class="card">
+        <h2>② Quantum-safe vault</h2>
+        <p class="muted">AES-256-GCM; data-key protected by <span id="kem-status" class="crypto-badge">…</span></p>
+        <button id="exfil">🕵 Simulate vault theft</button>
+        <pre id="exfil-out" class="hidden"></pre>
+      </div>
+    </section>
+
+    <!-- CENTER -->
+    <section class="col wide">
+      <div class="card">
+        <h2>① Privileged sessions <span class="muted">(brokered through us)</span></h2>
+        <div id="sessions" class="empty">No active sessions. Run the attack scenario or open one manually below.</div>
+      </div>
+
+      <div class="card">
+        <h2>🧪 Manual probe <span class="muted">(understand the working)</span></h2>
+        <div class="form-row">
+          <select id="m-user"></select>
+          <select id="m-system"></select>
+          <input id="m-device" placeholder="device" value="alice-laptop" />
+          <input id="m-hour" type="number" min="0" max="23" value="14" title="hour" />
+          <button id="m-open">Open session</button>
+        </div>
+        <div class="form-row">
+          <select id="m-action">
+            <option value="query">query (rows)</option>
+            <option value="create_user">create_user</option>
+            <option value="grant">grant</option>
+            <option value="config_change">config_change</option>
+          </select>
+          <input id="m-rows" type="number" value="100" title="rows" />
+          <input id="m-detail" placeholder="detail" value="" />
+          <button id="m-act">Send action to latest session</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>③④⑤ Live event feed <span class="muted">— each alert explains WHY</span></h2>
+        <div id="feed" class="empty">Waiting for privileged activity…</div>
+      </div>
+    </section>
+
+    <!-- RIGHT -->
+    <section class="col">
+      <div class="card">
+        <h2>⑥ Tamper-evident audit log</h2>
+        <p class="muted">Hash-chained + signed with <span id="sig-status" class="crypto-badge">…</span> · <span id="audit-count">0</span> records.</p>
+        <div class="form-row">
+          <button id="verify">✔ Verify integrity</button>
+          <button id="tamper" class="danger">✎ Tamper (cover tracks)</button>
+        </div>
+        <div id="audit-result"></div>
+        <pre id="audit-log"></pre>
+      </div>
+    </section>
+  </main>
+</body>
+<script src="app.js"></script>
+</html>

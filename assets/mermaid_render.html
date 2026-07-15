@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="mermaid.min.js"></script>
+<style>
+  html,body{ margin:0; padding:0; background:#ffffff; }
+  #wrap{ padding:28px; display:inline-block; background:#ffffff; }
+  .mermaid{ font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif; }
+</style>
+</head>
+<body>
+<div id="wrap">
+<pre class="mermaid">
+flowchart LR
+  U["fa:fa-user Privileged Users<br/>admins · DBAs · contractors · vendors"]:::user
+
+  subgraph SENTINEL["Privileged-Access Sentinel"]
+    direction TB
+    B["① PAM Access Broker<br/>connect-through · credential injection · live enforcement"]:::broker
+    T["③ Telemetry Stream<br/>logons · commands · queries · privesc · ACL"]:::gold
+    E["④ Behavioural + Risk Engine<br/>per-user & peer baselines · ATT&CK rules → score + WHY"]:::gold
+    R["⑤ Risk-Based Response<br/>log → step-up MFA → approval → KILL / rotate"]:::gold
+    V["② Quantum-Safe Vault<br/>AES-256-GCM · key wrapped ML-KEM-768 (FIPS 203)"]:::green
+    A["⑥ Tamper-Evident Audit Log<br/>hash-chain + ML-DSA-65 signed (FIPS 204)"]:::green
+    D["⑦ SOC Dashboard<br/>live risk · explainable alerts"]:::gold
+  end
+
+  S["🏦 Protected Admin Systems<br/>core-banking-admin · domain controller<br/>db-prod · payment switch"]:::danger
+  H["⑧ Purple-Team Harness<br/>replays insider TTPs — attacks AND validates"]:::danger
+
+  U -->|connect| B
+  B -->|brokered session| S
+  B -->|pull cred| V
+  B --> T --> E --> R
+  R -.->|enforce| B
+  E -->|sign| A --> D
+  H -.->|attack| B
+
+  classDef user fill:#0B1F3A,stroke:#5B6B7B,color:#ffffff,stroke-width:2px;
+  classDef broker fill:#123f4d,stroke:#F4C430,color:#ffffff,stroke-width:3px;
+  classDef gold fill:#0f3a52,stroke:#F4C430,color:#ffffff,stroke-width:2px;
+  classDef green fill:#0f3a52,stroke:#34d399,color:#ffffff,stroke-width:2px;
+  classDef danger fill:#3a1620,stroke:#FF6B4A,color:#ffffff,stroke-width:2px;
+</pre>
+</div>
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    look: "classic",
+    theme: "base",
+    flowchart: { curve: "basis", nodeSpacing: 55, rankSpacing: 80, padding: 14, htmlLabels: true },
+    themeVariables: {
+      fontFamily: "-apple-system, Segoe UI, Helvetica, Arial, sans-serif",
+      fontSize: "15px",
+      lineColor: "#7C8B99",
+      edgeLabelBackground: "#ffffff",
+      clusterBkg: "#F4F7F9",
+      clusterBorder: "#C9D6DE"
+    }
+  });
+</script>
+</body>
+</html>

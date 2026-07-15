@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Privileged-Access Sentinel — FinSpark'26</title>
+<style>
+  :root{
+    --navy:#08243a;
+    --navy2:#0f3a52;
+    --ink:#0E2233;
+    --slate:#5B6B7B;
+    --teal:#215868;        /* Bank of Maharashtra brand teal */
+    --teal-d:#1A4653;
+    --gold:#C79A1E;        /* readable gold for text/labels */
+    --gold-b:#FFD449;      /* Bank of Maharashtra brand gold — bars/marks */
+    --coral:#FF6B4A;
+    --mist:#F4F7F9;
+    --line:#E2E9EE;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  @page{ size:13.333in 7.5in; margin:0; }
+  html,body{ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; color:var(--ink); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .slide{
+    position:relative; width:13.333in; height:7.5in;
+    padding:0.72in 0.85in; page-break-after:always; overflow:hidden;
+    background:var(--white); display:flex; flex-direction:column;
+  }
+  .slide:last-child{ page-break-after:auto; }
+  /* Bank of Maharashtra mark, top-right on every slide (per hackathon template). */
+  .slide::before{
+    content:""; position:absolute; top:0.34in; right:0.85in;
+    width:1.92in; height:0.225in; z-index:5;
+    background:url("assets/bom-logo.png") no-repeat center/contain;
+  }
+  h1{ font-size:52px; line-height:1.05; letter-spacing:-1px; font-weight:800; }
+  h2{ font-size:33px; line-height:1.12; letter-spacing:-0.5px; font-weight:800; color:var(--navy); max-width:11.4in; }
+  h3{ font-size:18px; font-weight:700; color:var(--navy); }
+  p,li{ font-size:15.5px; line-height:1.5; color:var(--slate); }
+  .kicker{ font-size:12.5px; font-weight:800; letter-spacing:2.5px; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
+  .accentbar{ width:56px; height:6px; background:var(--gold-b); border-radius:3px; margin:16px 0 24px; }
+  .foot{ position:absolute; bottom:0.4in; left:0.85in; right:0.85in; display:flex; justify-content:space-between; font-size:10.5px; color:#9AA9B4; letter-spacing:.5px; }
+  .foot .num{ font-weight:800; }
+
+  /* Cover */
+  .cover{ background:radial-gradient(1200px 720px at 80% -12%, #12507a 0%, var(--navy) 58%); color:#fff; justify-content:center; }
+  .cover h1{ color:#fff; font-size:70px; }
+  .cover .tag{ font-size:21px; color:#B9D2E4; margin-top:20px; max-width:9.3in; line-height:1.45; }
+  .logo{ display:flex; align-items:center; gap:14px; margin-bottom:30px; }
+  .logo .mark{ width:48px; height:48px; border-radius:13px; background:linear-gradient(135deg,var(--gold-b),#ffe08a); display:flex; align-items:center; justify-content:center; }
+  .logo .mark span{ font-size:26px; }
+  .logo .name{ font-size:20px; font-weight:800; letter-spacing:1.5px; color:#fff; }
+  .cover .meta{ position:absolute; bottom:0.7in; left:0.85in; font-size:13.5px; color:#8FB0C7; letter-spacing:.5px;}
+  .cover .snip{ position:absolute; top:0.7in; right:0.85in; font-size:11.5px; color:#7CA0BA; text-align:right; letter-spacing:1px; text-transform:uppercase;}
+
+  /* layout */
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  .grid3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .grid4{ display:grid; grid-template-columns:repeat(4,1fr); gap:15px; }
+  .card{ background:var(--mist); border:1px solid var(--line); border-radius:14px; padding:20px; }
+  .card h3{ margin-bottom:7px; }
+  .card p{ font-size:14px; }
+  .card.navy{ background:var(--navy); border:none; color:#fff; }
+  .card.navy h3{ color:#fff; } .card.navy p,.card.navy li{ color:#D6E4EE; }
+  .pill{ display:inline-block; background:rgba(33,88,104,.10); color:var(--teal-d); font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:.4px; }
+  .pill.gold{ background:rgba(255,212,73,.18); color:#96731a; }
+  .pill.coral{ background:rgba(255,107,74,.14); color:#d1502f; }
+  ul.clean{ list-style:none; }
+  ul.clean li{ position:relative; padding-left:24px; margin-bottom:11px; font-size:15.5px; color:var(--ink); line-height:1.45; }
+  ul.clean li::before{ content:""; position:absolute; left:0; top:6px; width:11px; height:11px; border-radius:3px; background:var(--teal); }
+  ul.check li::before{ background:var(--teal); }
+  ul.cross li::before{ background:var(--coral); }
+  ul.gold li::before{ background:var(--gold-b); }
+  .big2{ display:grid; grid-template-columns:1.1fr .9fr; gap:30px; align-items:start; }
+  .note{ font-size:11px; color:#9AA9B4; margin-top:12px; font-style:italic; }
+  .num-b{ font-size:12px; font-weight:800; color:var(--teal); }
+  .stat{ font-size:40px; font-weight:800; color:var(--navy); letter-spacing:-1px; }
+
+  /* steps */
+  .steps{ display:flex; gap:10px; margin-top:6px; }
+  .step{ flex:1; padding:15px 14px 30px; border-radius:12px; background:var(--mist); border:1px solid var(--line); position:relative; }
+  .step .no{ font-size:12px; font-weight:800; color:var(--teal); }
+  .step h4{ font-size:14.5px; color:var(--navy); margin:6px 0; }
+  .step p{ font-size:12.5px; }
+  .step .own{ position:absolute; bottom:10px; left:14px; font-size:10px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--gold); }
+
+  /* image stage */
+  .imgstage{ flex:1; display:flex; align-items:center; justify-content:center; margin-top:6px; min-height:0; }
+  .imgstage img{ max-width:100%; max-height:4.5in; border:1px solid var(--line); border-radius:12px; box-shadow:0 6px 24px rgba(11,31,58,.10); }
+  .cap{ text-align:center; font-size:12px; color:var(--slate); margin:12px 0 22px; }
+  .cap b{ color:var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- 1. COVER -->
+<section class="slide cover">
+  <div class="snip">FinSpark'26 · Problem Statement 1</div>
+  <div class="logo"><div class="mark"><span>🛡️</span></div><div class="name">PRIVILEGED-ACCESS SENTINEL</div></div>
+  <h1>Catch the insider<br>before the breach.</h1>
+  <div class="tag">An <b style="color:#fff">attack-validated</b> insider-threat control plane for banking — it watches every privileged action, scores risk in real time against real attacker TTPs, stops misuse automatically, and secures it all with post-quantum cryptography.</div>
+  <div class="meta">Team HappenedBefore &nbsp;·&nbsp; FinSpark'26 &nbsp;·&nbsp; Privileged Access Misuse &amp; Insider Threat Detection</div>
+</section>
+
+<!-- 2. PROBLEM STATEMENT -->
+<section class="slide">
+  <div class="kicker">The Problem · PS1</div>
+  <h2>Insiders already hold the keys.<br>Normal security never sees them.</h2>
+  <div class="accentbar"></div>
+  <div class="grid3">
+    <div class="card"><h3>The threat is inside</h3><p>Employees, contractors, vendors and admins — acting maliciously, negligently, or under compromise — already have privileged access to core banking systems.</p></div>
+    <div class="card"><h3>Perimeter defences miss it</h3><p>They use <b>legitimate</b> credentials. Firewalls, EDR and login-time MFA don't flag a trusted user quietly abusing the access they're supposed to have.</p></div>
+    <div class="card"><h3>Lost in the noise</h3><p>One malicious action hides among thousands of normal privileged operations. By the time anyone notices, the data — or the money — is already gone.</p></div>
+  </div>
+  <div class="card navy" style="margin-top:22px">
+    <div class="rowhead" style="display:flex; align-items:center; justify-content:space-between">
+      <h3>Why we chose PS1</h3>
+      <span class="pill" style="background:rgba(255,212,73,.16); color:#FFD449">Attack-first advantage</span>
+    </div>
+    <p style="margin-top:8px; font-size:16px">Our team's edge is <b style="color:#fff">offensive security</b>. We know exactly how insiders abuse privileged access — so we detect it <b style="color:#fff">attack-first</b>, grounded in real techniques, not guessed at with a black-box model. It's also the most defensible problem for a security team versus a crowded fraud-ML field.</p>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">02</span></div>
+</section>
+
+<!-- 3. PRE-REQUISITE -->
+<section class="slide">
+  <div class="kicker">Pre-Requisites</div>
+  <h2>What the solution needs to run.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li><b>Privileged-session telemetry</b> — logons (time / geo / device), commands, DB queries, file access, privilege escalation, account &amp; ACL changes.</li>
+        <li><b>Identity &amp; asset inventory</b> — privileged users, roles, and which systems are crown-jewels.</li>
+        <li><b>Behavioural baselines</b> — per-identity history, or the <b>CMU CERT Insider Threat</b> dataset (r4.2 / r5.2) for training &amp; validation.</li>
+        <li><b>Inline deployment</b> — the tool sits as a broker in the privileged-access path (SSH / RDP / DB proxy).</li>
+      </ul>
+    </div>
+    <div class="card navy">
+      <h3>Assumptions</h3>
+      <ul class="clean check" style="margin-top:10px">
+        <li>Python 3.11+ runtime.</li>
+        <li>Runs fully <b>on-prem</b> — no external SaaS.</li>
+        <li><b>Data never leaves the bank.</b></li>
+        <li>Deploys alongside existing PAM / SIEM.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">03</span></div>
+</section>
+
+<!-- 4. TOOLS OR RESOURCES -->
+<section class="slide">
+  <div class="kicker">Tools &amp; Resources</div>
+  <h2>Built on a lean, standards-aligned stack.</h2>
+  <div class="accentbar"></div>
+  <div class="grid3">
+    <div class="card"><span class="pill">Backend</span><h3 style="margin-top:11px">Python · FastAPI</h3><p>Async event pipeline + static SOC dashboard. Zero build step.</p></div>
+    <div class="card" style="border:2px solid var(--teal)"><span class="pill">Post-Quantum</span><h3 style="margin-top:11px">ML-KEM-768 · ML-DSA-65</h3><p>Real NIST FIPS 203 / 204 (kyber-py, dilithium-py) + AES-256-GCM.</p></div>
+    <div class="card"><span class="pill">Detection</span><h3 style="margin-top:11px">Explainable scoring</h3><p>Rule + statistical baselines; peer-group / Isolation Forest next.</p></div>
+    <div class="card"><span class="pill gold">Threat model</span><h3 style="margin-top:11px">MITRE ATT&amp;CK</h3><p>Insider TTPs — T1078, T1530, T1136, T1098, T1562.</p></div>
+    <div class="card"><span class="pill">Frontend</span><h3 style="margin-top:11px">Vanilla JS dashboard</h3><p>Live risk gauges, explainable feed, verify / tamper controls.</p></div>
+    <div class="card"><span class="pill">Dataset</span><h3 style="margin-top:11px">CMU CERT</h3><p>Insider Threat benchmark for training &amp; validation.</p></div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">04</span></div>
+</section>
+
+<!-- 5. SUPPORTING DOCS -->
+<section class="slide">
+  <div class="kicker">Supporting Functional Documents</div>
+  <h2>Everything documented — to build it and defend it.</h2>
+  <div class="accentbar"></div>
+  <div class="grid2">
+    <ul class="clean">
+      <li><b>Architecture document</b> — component diagram ①–⑧ with data flows.</li>
+      <li><b>Coverage matrix</b> — every PS1 expected-outcome &amp; focus-area mapped to a component.</li>
+      <li><b>Risk-scoring logic</b> — signals, weights, ATT&amp;CK mapping, tier thresholds.</li>
+    </ul>
+    <ul class="clean">
+      <li><b>Demo runbook</b> — the 90-second malicious-insider scenario.</li>
+      <li><b>README</b> — run instructions + an honest "real vs. next iteration" note.</li>
+      <li><b>Working prototype</b> — end-to-end, runnable with a single command.</li>
+    </ul>
+  </div>
+  <div class="card navy" style="margin-top:24px">
+    <p style="font-size:16px; color:#EAF2F8"><b style="color:#fff">Every claim is demonstrable.</b> The prototype runs the attack, the detection, the enforcement, and the tamper-proof audit live — nothing on these slides is a mock-up.</p>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">05</span></div>
+</section>
+
+<!-- 6. KEY DIFFERENTIATORS & ADOPTION -->
+<section class="slide">
+  <div class="kicker">Key Differentiators &amp; Adoption Plan</div>
+  <h2>Why we win — and how a bank rolls it out.</h2>
+  <div class="accentbar"></div>
+  <div class="grid4">
+    <div class="card"><h3>Attack-validated</h3><p>A built-in purple-team harness generates the attack <b>and</b> proves detection caught it.</p></div>
+    <div class="card"><h3>Explainable</h3><p>Every alert states <b>why</b>, mapped to a MITRE ATT&amp;CK technique — no black box.</p></div>
+    <div class="card"><h3>Quantum-safe</h3><p>Credentials &amp; audit trail protected by real ML-KEM-768 + ML-DSA-65 today.</p></div>
+    <div class="card"><h3>Inline enforcement</h3><p>Not just detect — step-up MFA, approve, or kill the session in real time.</p></div>
+  </div>
+  <h3 style="margin:24px 0 4px">Adoption plan</h3>
+  <div class="steps">
+    <div class="step"><div class="no">PHASE 1</div><h4>Observe</h4><p>Deploy read-only beside existing PAM / SIEM — score risk, prove signal.</p><div class="own">0–3 months</div></div>
+    <div class="step"><div class="no">PHASE 2</div><h4>Enforce</h4><p>Turn on graduated response on crown-jewel systems.</p><div class="own">3–9 months</div></div>
+    <div class="step"><div class="no">PHASE 3</div><h4>Integrate</h4><p>Wire into ITSM / SOAR; expand coverage bank-wide.</p><div class="own">9 months+</div></div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">06</span></div>
+</section>
+
+<!-- 7. GITHUB / PROTOTYPE -->
+<section class="slide">
+  <div class="kicker">Product &amp; Repository</div>
+  <h2>A runnable MVP, one command away.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li><b>GitHub</b> — github.com/&lt;your-team&gt;/privileged-access-sentinel <span style="color:#9AA9B4">(add link before submission)</span></li>
+        <li><b>Demo video</b> — &lt;add link&gt;</li>
+        <li><b>Architecture &amp; screenshots</b> — see the following slides.</li>
+      </ul>
+    </div>
+    <div class="card navy">
+      <h3>Run it in 30 seconds</h3>
+      <div style="margin-top:12px; background:#04121d; border:1px solid #1b4a63; border-radius:10px; padding:14px 16px; font-family:ui-monospace,Menlo,monospace; font-size:13px; color:#8FE3D4; line-height:1.7">
+        $ ./run.sh<br>
+        <span style="color:#7CA0BA">→ http://127.0.0.1:8000</span><br>
+        <span style="color:#7CA0BA"># click ▶ Run Attack Scenario</span>
+      </div>
+      <p style="color:#8FB0C7; font-size:12px; margin-top:12px">FastAPI backend + static dashboard · no external services.</p>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">07</span></div>
+</section>
+
+<!-- 8. BUSINESS POTENTIAL -->
+<section class="slide">
+  <div class="kicker">Business Potential &amp; Relevance</div>
+  <h2>A real market — with a regulator tailwind.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li>Insider misuse is a <b>leading cause of banking data breaches</b>; RBI &amp; IBA mandate strong privileged-access control and tamper-proof audit.</li>
+        <li>PAM + UEBA is a <b>multi-billion-dollar market</b> (CyberArk, Securonix) — but nothing is India / RBI-mapped <b>and</b> quantum-safe. That's our wedge.</li>
+        <li>Applies to any regulated enterprise — <b>banking, insurance, fintech, government.</b></li>
+      </ul>
+    </div>
+    <div class="card navy">
+      <h3>Regulator tailwind</h3>
+      <ul class="clean check" style="margin-top:10px">
+        <li>RBI Cyber Security Framework — access control &amp; audit integrity.</li>
+        <li>Mandated tamper-proof audit trails.</li>
+        <li>The coming <b>post-quantum migration</b> — we're already there.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">08</span></div>
+</section>
+
+<!-- 9. UNIQUENESS -->
+<section class="slide">
+  <div class="kicker">Uniqueness of Approach</div>
+  <h2>What makes this different.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li><b>Attack-first, not model-first</b> — detection is grounded in real attacker TTPs, built by pentesters who know how insiders actually operate.</li>
+        <li><b>Self-validating</b> — a purple-team harness ships with the product; detection is continuously proven, not assumed.</li>
+        <li><b>Quantum-safe custody</b> — post-quantum credential vault + PQC-signed audit log resist harvest-now-decrypt-later.</li>
+        <li><b>Observe AND enforce</b> — one inline broker; most tools only alert after the fact.</li>
+      </ul>
+    </div>
+    <div class="card navy">
+      <h3>The one-line pitch</h3>
+      <p style="color:#CFE0EC; font-size:17px; line-height:1.5; margin-top:10px">"We didn't train a model and hope. We <b style="color:#fff">attacked it, then proved it holds</b> — and locked it with post-quantum crypto."</p>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">09</span></div>
+</section>
+
+<!-- 10. USER EXPERIENCE -->
+<section class="slide">
+  <div class="kicker">User Experience</div>
+  <h2>One screen. Every alert explains itself.</h2>
+  <div class="accentbar"></div>
+  <div class="grid3">
+    <div class="card"><h3>Live risk, at a glance</h3><p>A colour-coded gauge per session — green → amber → red — that climbs as an insider crosses the line.</p></div>
+    <div class="card"><h3>Plain-English "why"</h3><p>Each alert reads like a sentence, tagged with its ATT&amp;CK technique. Analysts trust it instantly.</p></div>
+    <div class="card"><h3>Acts for you</h3><p>Graduated automatic responses cut analyst workload — the system steps up, blocks, or kills.</p></div>
+  </div>
+  <div class="grid3" style="margin-top:18px">
+    <div class="card"><h3>One-click demo</h3><p>Replay a full insider attack, or use the manual probe to explore how behaviour maps to risk.</p></div>
+    <div class="card"><h3>Tangible integrity</h3><p>Verify / Tamper buttons make the audit-log guarantee something you can <b>see</b> in seconds.</p></div>
+    <div class="card"><h3>Zero training</h3><p>A SOC analyst reads the dashboard with no manual — the design carries the meaning.</p></div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">10</span></div>
+</section>
+
+<!-- 11. SCALABILITY -->
+<section class="slide">
+  <div class="kicker">Scalability</div>
+  <h2>From one data-centre to a national bank.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li><b>Stateless scoring</b> — scales horizontally behind a queue (Kafka / Redis stream).</li>
+        <li><b>Per-identity + peer-group baselines</b> handle thousands of privileged users.</li>
+        <li><b>Broker per region / data-centre</b>; a central risk plane aggregates signals.</li>
+        <li><b>Crown-jewel weighting</b> prioritises what matters under high session volume.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Deployment shape</h3>
+      <p style="margin-top:8px">Cloud-native and containerisable, with an on-prem option for data residency. Brokers scale out per site; the scoring plane scales out per load — no shared bottleneck.</p>
+      <div style="margin-top:14px"><span class="pill">Horizontally scalable</span> <span class="pill gold">On-prem or cloud</span></div>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">11</span></div>
+</section>
+
+<!-- 12. DEPLOYMENT -->
+<section class="slide">
+  <div class="kicker">Ease of Deployment &amp; Maintenance</div>
+  <h2>Easy to deploy, easy to trust.</h2>
+  <div class="accentbar"></div>
+  <div class="grid2">
+    <ul class="clean">
+      <li><b>Single service + static dashboard</b> — start with <code>./run.sh</code>.</li>
+      <li><b>No external SaaS</b> — runs fully on-prem; data never leaves the bank.</li>
+      <li><b>Modular</b> — swap detection, crypto, or ingestion without touching the rest.</li>
+    </ul>
+    <ul class="clean">
+      <li><b>Transparent rules</b> — baselines &amp; thresholds are readable and tunable by the SOC.</li>
+      <li><b>Pure-Python PQC</b> — no native builds; standards-aligned (FIPS 203 / 204).</li>
+      <li><b>Low footprint</b> — containerises to a small, auditable image.</li>
+    </ul>
+  </div>
+  <div class="card navy" style="margin-top:24px">
+    <p style="font-size:16px; color:#EAF2F8">Because the logic is <b style="color:#fff">rules + explainable statistics</b> rather than an opaque model, the SOC team can read it, trust it, and tune it — which is what actually gets security tools adopted inside a bank.</p>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">12</span></div>
+</section>
+
+<!-- 13. SECURITY CONSIDERATIONS -->
+<section class="slide">
+  <div class="kicker">Security Considerations</div>
+  <h2>Security <i>is</i> the product — including post-quantum.</h2>
+  <div class="accentbar"></div>
+  <div class="big2">
+    <div>
+      <ul class="clean">
+        <li><b>Zero credential exposure</b> — secrets are brokered via injection; users never see them.</li>
+        <li><b>Least-privilege, risk-based access</b> — automatic session kill on critical risk.</li>
+        <li><b>Aligned to standards</b> — RBI Cyber Security Framework, MITRE ATT&amp;CK, NIST PQC.</li>
+      </ul>
+    </div>
+    <div class="card navy">
+      <h3>Post-quantum by design</h3>
+      <ul class="clean check" style="margin-top:10px">
+        <li>Credentials: AES-256-GCM, data-key wrapped by <b>ML-KEM-768</b> (FIPS 203).</li>
+        <li>Audit log: hash-chained &amp; <b>ML-DSA-65</b> signed (FIPS 204) — any rewrite is detected.</li>
+        <li>Resists <b>harvest-now-decrypt-later</b>.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">13</span></div>
+</section>
+
+<!-- 14. ARCHITECTURE -->
+<section class="slide">
+  <div class="kicker">Architecture</div>
+  <h2>How it all fits together.</h2>
+  <div class="accentbar" style="margin-bottom:10px"></div>
+  <div class="imgstage"><img src="assets/architecture.png" alt="Architecture diagram"></div>
+  <div class="cap">Connect-through broker ① · quantum-safe vault ② · telemetry ③ · risk engine ④ · graduated response ⑤ · tamper-evident audit ⑥ · SOC dashboard ⑦ · purple-team harness ⑧.</div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">14</span></div>
+</section>
+
+<!-- 15. SCREENSHOTS -->
+<section class="slide">
+  <div class="kicker">Solution Screenshots · MVP</div>
+  <h2>The working MVP, live.</h2>
+  <div class="accentbar" style="margin-bottom:10px"></div>
+  <div class="imgstage"><img src="assets/dashboard.png" alt="SOC dashboard during insider attack"></div>
+  <div class="cap">Insider attack, live: contractor <b>carol</b> hits <b style="color:#d1502f">100 CRITICAL</b> → session <b>KILLED</b>, each step ATT&amp;CK-tagged, audit chain verified (ML-DSA-65), stolen vault ciphertext-only (ML-KEM-768).</div>
+  <div class="foot"><span>PRIVILEGED-ACCESS SENTINEL · FinSpark'26</span><span class="num">15</span></div>
+</section>
+
+<!-- 16. CLOSE -->
+<section class="slide cover" style="justify-content:center">
+  <div class="logo"><div class="mark"><span>🛡️</span></div><div class="name">PRIVILEGED-ACCESS SENTINEL</div></div>
+  <h1 style="font-size:58px">Catch the insider.<br>Prove it. Every time.</h1>
+  <div class="tag">Attack-validated detection · inline enforcement · post-quantum custody.<br>The control plane for privileged access in banking.</div>
+  <div class="meta">Team HappenedBefore &nbsp;·&nbsp; prateekkanurkar@gmail.com &nbsp;·&nbsp; FinSpark'26 · PS1</div>
+  <div class="snip">Thank you</div>
+</section>
+
+</body>
+</html>

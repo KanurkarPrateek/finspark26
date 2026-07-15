@@ -1,0 +1,11 @@
+.venv/
+**/__pycache__/
+*.pyc
+assets/
+docs/
+*.pptx
+*.pdf
+*.html
+build_deck.py
+build_pptx.py
+.git/
