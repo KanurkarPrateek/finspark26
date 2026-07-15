@@ -271,8 +271,8 @@ for i,(no,h4,b) in enumerate(phases):
 # 6 — PRODUCT & ACCESS
 s = slide(); head(s, "Product & Repository", "A runnable MVP, one command away.", "07")
 bullets(s, LX, 2.4, 6.4, 3, [
-    "**GitHub** — github.com/<team>/privileged-access-sentinel  (add link).",
-    "**Demo video** — <add link>.",
+    "**Live demo** — happenedbefore.prateekkanurkar.in — the real thing, running on Kubernetes. Opens with a **guided walkthrough**: no manual needed.",
+    "**GitHub** — github.com/KanurkarPrateek/finspark26",
     "**Architecture & screenshots** — see the following slides.",
 ], size=15, gap=13)
 cx = LX+6.9; card(s, cx, 2.4, CW-6.9, 3.4, navy=True)
@@ -282,9 +282,12 @@ codebg = rect(s, cx+0.3, 3.2, CW-6.9-0.6, 1.4, RGBColor(0x04,0x12,0x1D), line=RG
 tfc = tb(s, cx+0.5, 3.38, CW-6.9-1.0, 1.1)
 run(para(tfc, True, space_after=4), "$ ./run.sh", 13, RGBColor(0x8F,0xE3,0xD4), font="Courier New")
 run(para(tfc, space_after=4), "→ http://127.0.0.1:8000", 12, RGBColor(0x7C,0xA0,0xBA), font="Courier New")
-run(para(tfc), "# click ▶ Run Attack Scenario", 12, RGBColor(0x7C,0xA0,0xBA), font="Courier New")
-tfn = tb(s, cx+0.3, 4.75, CW-6.9-0.6, 0.6)
-run(para(tfn, True, line=1.2), "FastAPI backend + static dashboard · no external services.", 12, RGBColor(0x8F,0xB0,0xC7))
+run(para(tfc), "# or just open the live URL", 12, RGBColor(0x7C,0xA0,0xBA), font="Courier New")
+tfn = tb(s, cx+0.3, 4.75, CW-6.9-0.6, 0.8)
+p = para(tfn, True, line=1.25)
+run(p, "Containerised and deployed — ", 12, RGBColor(0x8F,0xB0,0xC7))
+run(p, "nothing to install to judge it.", 12, WHITE, bold=True)
+run(para(tfn, line=1.25), "FastAPI + static dashboard · no external services.", 12, RGBColor(0x8F,0xB0,0xC7))
 
 # 7 — BUSINESS POTENTIAL
 s = slide(); head(s, "Business Potential & Relevance", "A real market — with a regulator tailwind.", "08")
@@ -322,9 +325,9 @@ gw = (CW-2*0.25)/3
 ux = [("Live risk, at a glance","A colour-coded gauge per session — green → amber → red — that climbs as an insider crosses the line."),
       ("Plain-English 'why'","Each alert reads like a sentence, tagged with its ATT&CK technique. Analysts trust it instantly."),
       ("Acts for you","Graduated automatic responses cut analyst workload — the system steps up, blocks, or kills."),
-      ("One-click demo","Replay a full insider attack, or use the manual probe to explore how behaviour maps to risk."),
+      ("Guided walkthrough","Opens with a 10-step tour that narrates the attack as it lands — a first-time user understands the product in 90 seconds."),
       ("Tangible integrity","Verify / Tamper controls make the audit-log guarantee something you can see in seconds."),
-      ("Zero training","A SOC analyst reads the dashboard with no manual — the design carries the meaning.")]
+      ("Explore it yourself","A manual probe lets anyone test the engine — open a normal session and watch it stay green. The baselines are real, not scripted.")]
 for i,(h3,b) in enumerate(ux):
     r,c = divmod(i,3); x = LX+c*(gw+0.25); y=2.3+r*(1.75+0.22)
     card(s, x, y, gw, 1.75); card_text(s, x, y, gw, 1.75, h3, [b], bsize=11.5)
@@ -399,7 +402,7 @@ if w > 11.4: w = 11.4; h = w/ar
 s.shapes.add_picture("/Users/apple/personal-space/finspark26/assets/dashboard.png",
                      Inches(LX + (CW-w)/2), Inches(2.2), Inches(w), Inches(h))
 tfc = tb(s, LX, 6.55, CW, 0.4)
-run(para(tfc, True, align=PP_ALIGN.CENTER), "Insider attack, live: contractor carol hits 100 CRITICAL → session KILLED, each step ATT&CK-tagged, audit chain verified (ML-DSA-65), vault ciphertext-only (ML-KEM-768).", 11, SLATE)
+run(para(tfc, True, align=PP_ALIGN.CENTER), "The built-in guided demo, mid-attack: contractor carol hits 100 CRITICAL → session KILLED, every step explained and ATT&CK-tagged. Credentials sealed with ML-KEM-768, audit trail signed with ML-DSA-65 — both live, not mocked.", 11, SLATE)
 
 # 15 — CLOSE
 s = slide()

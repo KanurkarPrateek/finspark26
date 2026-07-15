@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: sentinel
-          image: kanurkarprateek/privileged-access-sentinel:v1
+          image: kanurkarprateek/privileged-access-sentinel:v3
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
