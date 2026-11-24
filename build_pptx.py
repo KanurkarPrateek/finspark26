@@ -271,7 +271,7 @@ for i,(no,h4,b) in enumerate(phases):
 # 6 — PRODUCT & ACCESS
 s = slide(); head(s, "Product & Repository", "A runnable MVP, one command away.", "07")
 bullets(s, LX, 2.4, 6.4, 3, [
-    "**Live demo** — happenedbefore.prateekkanurkar.in — the real thing, running on Kubernetes. Opens with a **guided walkthrough**: no manual needed.",
+    "**Live demo** — happenedbefore.opsprateek.in — the real thing, running on Kubernetes. Opens with a **guided walkthrough**: no manual needed.",
     "**GitHub** — github.com/KanurkarPrateek/finspark26",
     "**Architecture & screenshots** — see the following slides.",
 ], size=15, gap=13)
